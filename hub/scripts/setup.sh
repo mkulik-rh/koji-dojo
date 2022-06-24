@@ -45,7 +45,7 @@ generate_ssl_certificates() {
 	if [ -n "$ADDITIONAL_SAN" ]; then
 		CA_SAN="IP.1:${IP},DNS.1:localhost,DNS.2:${IP},DNS.3:${ADDITIONAL_SAN},DNS.4:koji-hub,email:move"
 	fi
- 
+
 	cat ssl.cnf | sed "s/email\:move/${CA_SAN}/"> $conf
 	cp ssl.cnf $conf
 

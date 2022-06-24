@@ -1,26 +1,18 @@
-
 koji-db:
-    image: "postgres:9.4"
-    hostname: koji-db
-    environment:
-        - POSTGRES_DB=koji
-        - POSTGRES_USER=koji
-        - POSTGRES_PASSWORD=mypassword
-
+  image: "postgres:14"
+  hostname: koji-db
+  environment:
+    - POSTGRES_DB=koji
+    - POSTGRES_USER=koji
+    - POSTGRES_PASSWORD=mypassword
+  volumes:
+    - ./contrib/setup.sh:/docker-entrypoint-initdb.d/initdb.sh
+    - ./pgdata:/var/lib/postgresql/data
 koji-hub:
-    build: hub
-    hostname: koji-hub
-    volumes:
-        - /opt/koji:/opt/koji:rw,z
-        - /opt/koji-clients:/opt/koji-clients:rw,z
-    links:
-        - koji-db
-
-koji-client:
-    build: client
-    hostname: koji-client
-    volumes_from:
-        - koji-hub:rw
-    links:
-        - koji-hub
-
+  build: hub
+  hostname: koji-hub
+  volumes:
+    - /opt/koji:/opt/koji:rw,z
+    - /opt/koji-clients:/opt/koji-clients:rw,z
+  links:
+    - koji-db
